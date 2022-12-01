@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { IsUuidPipe } from '../constants/utils/pipes';
 import { UserService } from '../user/user.service';
-import { AccountService } from './account.service';
+import { AccountService } from './../account/services';
 import { AccountValidationService } from './services/account-validation.service';
 
 @Controller('accounts')
