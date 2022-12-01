@@ -25,13 +25,13 @@ export class IsUuidPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
     if (validator.isUUID(value)) return value;
     else
-      throw new BadRequestException('Invalid id format. Should be UUID string');
+      throw new BadRequestException(
+        'Invalid id format. Should be UUID string.',
+      );
   }
 }
 
 function checkNumberPresenceOrDefault(value: any, _default: any) {
-  console.log(value, _default);
-
   if (isNaN(value)) return _default;
   else return value;
 }

@@ -1,17 +1,32 @@
 import {
   ConflictException,
   Controller,
+  Get,
   NotFoundException,
   Param,
   Post,
+  Query,
 } from '@nestjs/common';
-import { IsUuidPipe } from '../constants/utils/pipes';
+import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  DefaultPagePipe,
+  DefaultTakePipe,
+  IsUuidPipe,
+} from '../constants/utils/pipes';
 import { UserService } from '../user/user.service';
 import { AccountService } from './../account/services';
+import { AccountEntity } from './account.entity';
 import { AccountValidationService } from './services/account-validation.service';
 
+@ApiTags('accounts')
 @Controller('accounts')
-@Controller('account')
 export class AccountController {
   constructor(
     private readonly accountService: AccountService,
@@ -20,6 +35,19 @@ export class AccountController {
   ) {}
 
   @Post('/:userId')
+  @ApiOkResponse({
+    description: 'Account',
+    type: AccountEntity,
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid id format. Should be UUID string.',
+  })
+  @ApiNotFoundResponse({
+    description: 'User not found',
+  })
+  @ApiConflictResponse({
+    description: 'User or account already exists',
+  })
   async createAccountFor(@Param('userId', IsUuidPipe) userId: string) {
     const account = await this.accountService.findOne({
       where: {
@@ -39,5 +67,24 @@ export class AccountController {
     this.accountValidationService.validateCredit(user);
 
     return this.accountService.create(user);
+  }
+
+  @Get()
+  @ApiOkResponse({
+    description: 'Accounts array',
+    type: AccountEntity,
+    isArray: true,
+  })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'take', required: false, type: Number })
+  async getAccounts(
+    @Query('page', DefaultPagePipe) page?: number,
+    @Query('take', DefaultTakePipe) take?: number,
+  ) {
+    return this.accountService.findMany({
+      order: { createdAt: 'ASC' },
+      take: take,
+      skip: page * take,
+    });
   }
 }

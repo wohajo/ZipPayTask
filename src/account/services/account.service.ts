@@ -14,7 +14,9 @@ export class AccountService {
   async create(user: UserEntity) {
     return this.accountRepository.save({
       availableCredit: '1000',
-      user: user,
+      user: {
+        id: user.id,
+      },
     });
   }
 
