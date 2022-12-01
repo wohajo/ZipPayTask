@@ -10,7 +10,9 @@ export class UserEntity extends BaseEntity {
   public name: string;
 
   @ApiProperty()
-  @Column()
+  @Column({
+    unique: true,
+  })
   public email: string;
 
   @ApiProperty()

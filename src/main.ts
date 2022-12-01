@@ -9,19 +9,21 @@ async function bootstrap() {
   app.useLogger(app.get(PinoLogger));
 
   const logger = new Logger();
+  const isProd = process.env.NODE_ENV.includes('PROD');
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  if (!process.env.NODE_ENV.includes('PROD')) {
+  if (!isProd)
     SwaggerModule.setup(
       'explorer',
       app,
       SwaggerModule.createDocument(app, new DocumentBuilder().build()),
     );
-  }
 
   app.enableShutdownHooks();
 
   await app.listen(3000);
   logger.log(`Application is listening on ${await app.getUrl()}`);
+  if (!isProd)
+    logger.log(`Explorer available at ${await app.getUrl()}/explorer`);
 }
 bootstrap();

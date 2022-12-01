@@ -6,8 +6,10 @@ import { UserEntity } from '../user/user.entity';
 @Entity({ name: 'account' })
 export class AccountEntity extends BaseEntity {
   @ApiProperty()
-  @Column()
-  public credit: string;
+  @Column({
+    name: 'available_credit',
+  })
+  public availableCredit: string;
 
   @OneToOne(() => UserEntity, (user) => user.account)
   @JoinColumn()
