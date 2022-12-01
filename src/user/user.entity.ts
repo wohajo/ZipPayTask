@@ -24,5 +24,5 @@ export class UserEntity extends BaseEntity {
   public expenses: string;
 
   @OneToOne(() => AccountEntity, (account) => account.user)
-  account: AccountEntity;
+  account?: AccountEntity;
 }
