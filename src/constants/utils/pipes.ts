@@ -16,7 +16,8 @@ export class DefaultPagePipe implements PipeTransform {
 @Injectable()
 export class DefaultTakePipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    return checkNumberPresenceOrDefault(value, 10);
+    const _value = checkNumberPresenceOrDefault(value, 10);
+    return _value > 100 ? 100 : _value;
   }
 }
 

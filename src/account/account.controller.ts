@@ -10,6 +10,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
+  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiQuery,
@@ -35,7 +36,7 @@ export class AccountController {
   ) {}
 
   @Post('/:userId')
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     description: 'Account',
     type: AccountEntity,
   })

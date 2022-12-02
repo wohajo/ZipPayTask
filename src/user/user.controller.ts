@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   ApiConflictResponse,
+  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiQuery,
@@ -21,7 +22,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     description: 'Created user',
     type: UserEntity,
   })
@@ -48,6 +49,7 @@ export class UserController {
   @ApiOkResponse({
     description: 'Users array',
     type: UserEntity,
+    isArray: true,
   })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'take', required: false, type: Number })
